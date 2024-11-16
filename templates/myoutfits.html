@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+{%block title %}My outfits{% endblock %}
+
+{%block content%} 
+{% if not outfits%}
+<section class="flex grow justify-center items-center">
+    <h1>You dont have any outfits. Create some <a href="{{ url_for('make_outfit') }}" class="underline">here</a></h1>
+</section>
+{%else%}
+<section class="flex flex-wrap grow px-8 py-4">
+    {% for outfit in outfits %}
+        <div class="p-4 m-2 w-64">
+            <h2 class="text-xl text-center">{{ outfit['name'] }}</h2>
+            <div class="flex flex-col items-center">
+                <img src="{{ outfit['top'] }}" alt="Top" class="w-full h-48 object-contain">
+                <img src="{{ outfit['middle'] }}" alt="Middle" class="w-full h-48 -mt-8 object-contain">
+                <img src="{{ outfit['bottom'] }}" alt="Bottom" class="w-full h-[120px] object-contain">
+            </div>
+            <form action="{{ url_for('delete_outfit', outfit_id=outfit['id']) }}" method="POST" class="flex justify-center items-center">
+                <button type="submit" class="underline">Delete</button>
+            </form>
+        </div>
+        {% endfor %}
+</section>
+{%endif%}
+{%endblock%}
