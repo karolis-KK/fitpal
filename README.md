@@ -1,6 +1,5 @@
-![image](https://github.com/user-attachments/assets/55949caa-88d2-4925-987d-ca08e668d4bd)
-
 # Fitpal
+![fitpal](https://github.com/user-attachments/assets/72827f1c-c98e-41cd-a5b5-dec75e8ffd9b)
 
 FitPal: Your Personal Outfit Maker & Closet Organizer
 
