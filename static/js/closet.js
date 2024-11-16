@@ -19,7 +19,6 @@ closeFiltersButton.addEventListener("click", () => {
     filtersPopup.classList.remove("flex");
 })
 
-// Show Add Item Popup
 add_clothes.forEach(button => {
     button.addEventListener("click", () => {
         flashPopup.classList.remove("hidden");
@@ -27,30 +26,24 @@ add_clothes.forEach(button => {
     });
 });
 
-// Close Add Item Popup
 closeAddButton.addEventListener("click", () => {
     flashPopup.classList.remove("flex");
     flashPopup.classList.add("hidden");
 });
 
-// Show Edit Item Popup
 editButtons.forEach(button => {
     button.addEventListener("click", (event) => {
         const itemId = button.getAttribute("data-item-id");
         const currentText = button.getAttribute("data-current-text");
 
-        // Set the form action to the edit route
         editForm.action = `/edit-clothing/${itemId}`;
-        // Populate the input with the current text
         editClothingTextInput.value = currentText;
-
-        // Show the edit popup
+        
         editPopup.classList.remove("hidden");
         editPopup.classList.add("flex");
     });
 });
 
-// Close Edit Item Popup
 closeEditButton.addEventListener("click", () => {
     editPopup.classList.remove("flex");
     editPopup.classList.add("hidden");

@@ -71,7 +71,6 @@ def my_closet():
             } for item in clothing_items
         ]
 
-        # Sort clothing items based on the selected option
         if sort_by == "newest":
             clothing_items_list.sort(key=lambda x: x['timestamp'], reverse=True)
         elif sort_by == "oldest":
@@ -177,7 +176,6 @@ def save_outfit():
     middle_image = data.get('middle')
     bottom_image = data.get('bottom')
 
-    # Save the outfit to the database (assuming you have a collection for outfits)
     db.collection('outfits').add({
         'name': outfit_name,
         'top': top_image,
@@ -191,7 +189,7 @@ def save_outfit():
 def delete_outfit(outfit_id):
     db.collection('outfits').document(outfit_id).delete()
     flash("Outfit deleted successfully!")
-    return redirect(url_for('my_outfits'))  # Redirect to the page displaying outfits
+    return redirect(url_for('my_outfits')) 
 
 if __name__ == "__main__":
     app.run(debug=True)

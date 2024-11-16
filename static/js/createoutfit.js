@@ -108,7 +108,6 @@ document.getElementById("save-outfit").addEventListener("click", () => {
     .then(data => {
         if (data.success) {
             console.log('Outfit saved successfully!');
-            // Optionally, you can close the save popup here
             document.getElementById("save-popup").classList.add("hidden");
         } else {
             console.log('Failed to save outfit.');
