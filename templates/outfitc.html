@@ -7,8 +7,8 @@
         <div>
           <div class="flex flex-col">
           <div id="top-popup" class="fixed hidden inset-0 h-screen bg-black bg-opacity-50 items-center justify-center z-50">
-            <div class="bg-white rounded-md px-4 py-4 w-[80rem] h-[45rem] flex-col justify-center items-center overflow-auto">
-              <div class="flex justify-between">
+            <div class="bg-white rounded-md px-4 pb-4 flex-col justify-center h-[40rem] items-center overflow-auto mx-8">
+              <div class="flex bg-white justify-between py-4 sticky z-50 inset-0">
                 <h1>Select top piece</h1>
                 <button id="close-popup-top">
                   <svg class="size-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -16,17 +16,51 @@
                   </svg>
                 </button>
               </div>
-              <div>
-                <div class="flex flex-wrap">
-                  {% for item in top_items %}
-                  <button class="selected_item_top flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
+              <div class="flex flex-wrap justify-center lg:justify-normal">
+                {% for item in top_items %}
+                <button class="selected_item_top flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
+                  {%if item['type'] != 'Shoes'%}
+                  <div class="w-[300px] h-[300px] overflow-hidden relative">
+                      <img class="top_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                  </div>
+                  {%else%}
+                  <div class="w-[300px] h-[300px] overflow-hidden relative flex justify-center items-center">
+                      <img class="top_inner w-[190px] h-[190px] object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                  </div>
+                  {%endif%}
+                  <div class="flex flex-col w-[12rem]">
+                      <h1 class="underline">{{ item['type'] }}</h1>
+                      <p class="my-1">{{ item['text'] }}</p>
+                  </div>
+                </button>
+              {% endfor %}
+              </div>
+            </div>
+          </div>
+          <button id="top" class="w-[18rem] h-[12rem] rounded-md flex justify-center items-center"><svg class="size-8 text-neutral-900" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg></button>
+            <hr class="hr border-neutral-900">
+            <div id="middle-popup" class="fixed hidden inset-0 h-screen bg-black bg-opacity-50 items-center justify-center z-50">
+              <div class="bg-white rounded-md px-4 pb-4 flex-col justify-center h-[40rem] items-center overflow-auto mx-8">
+                <div class="flex bg-white justify-between py-4 sticky z-50 inset-0">
+                  <h1>Select middle piece</h1>
+                  <button id="close-popup-middle">
+                    <svg class="size-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="flex flex-wrap basis-1/2 justify-center lg:justify-normal">
+                  {% for item in middle_items %}
+                  <button class="selected_item_middle flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
                     {%if item['type'] != 'Shoes'%}
                     <div class="w-[300px] h-[300px] overflow-hidden relative">
-                        <img class="top_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                        <img class="middle_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
                     </div>
                     {%else%}
                     <div class="w-[300px] h-[300px] overflow-hidden relative flex justify-center items-center">
-                        <img class="top_inner w-[190px] h-[190px] object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                        <img class="middle_inner w-[190px] h-[190px] object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
                     </div>
                     {%endif%}
                     <div class="flex flex-col w-[12rem]">
@@ -38,51 +72,13 @@
                 </div>
               </div>
             </div>
-          </div>
-          <button id="top" class="w-[18rem] h-[12rem] rounded-md flex justify-center items-center"><svg class="size-8 text-neutral-900" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-            <hr class="hr border-neutral-900">
-            <div id="middle-popup" class="fixed hidden inset-0 h-screen bg-black bg-opacity-50 items-center justify-center z-50">
-              <div class="bg-white flex flex-col rounded-md px-4 py-4">
-                <div class="flex justify-between">
-                  <h1>Select middle piece</h1>
-                  <button id="close-popup-middle">
-                    <svg class="size-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                </div>
-                <div>
-                  <div class="flex flex-wrap">
-                    {% for item in middle_items %}
-                    <button class="selected_item_middle flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
-                      {%if item['type'] != 'Shoes'%}
-                      <div class="w-[300px] h-[300px] overflow-hidden relative">
-                          <img class="middle_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
-                      </div>
-                      {%else%}
-                      <div class="w-[300px] h-[300px] overflow-hidden relative flex justify-center items-center">
-                          <img class="middle_inner w-[190px] h-[190px] object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
-                      </div>
-                      {%endif%}
-                      <div class="flex flex-col w-[12rem]">
-                          <h1 class="underline">{{ item['type'] }}</h1>
-                          <p class="my-1">{{ item['text'] }}</p>
-                      </div>
-                    </button>
-                  {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
             <button id="middle" class="w-[18rem] h-[12rem] my-2 rounded-md flex justify-center items-center"><svg class="size-8 text-neutral-900" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
             <hr class="hr border-neutral-900">
             <div id="bottom-popup" class="fixed hidden inset-0 h-screen bg-black bg-opacity-50 items-center justify-center z-50">
-              <div class="bg-white rounded-md px-4 py-4">
-                <div class="flex justify-between">
+              <div class="bg-white rounded-md px-4 pb-4 flex-col justify-center h-[40rem] items-center overflow-auto mx-8">
+                <div class="flex bg-white justify-between py-4 sticky z-50 inset-0">
                   <h1>Select bottom piece</h1>
                   <button id="close-popup-bottom">
                     <svg class="size-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -90,26 +86,24 @@
                     </svg>
                   </button>
                 </div>
-                <div>
-                  <div class="flex flex-wrap">
-                    {% for item in bottom_items %}
-                    <button class="selected_item_bottom flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
-                      {%if item['type'] != 'Shoes'%}
-                      <div class="w-[300px] h-[300px] overflow-hidden relative">
-                          <img class="bottom_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
-                      </div>
-                      {%else%}
-                      <div class="w-[300px] h-[300px] overflow-hidden relative flex justify-center items-center">
-                          <img class="bottom_inner w-[190px] h-[190px] object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
-                      </div>
-                      {%endif%}
-                      <div class="flex flex-col w-[12rem]">
-                          <h1 class="underline">{{ item['type'] }}</h1>
-                          <p class="my-1">{{ item['text'] }}</p>
-                      </div>
-                    </button>
-                  {% endfor %}
-                  </div>
+                <div class="flex flex-wrap justify-center lg:justify-normal">
+                  {% for item in bottom_items %}
+                  <button class="selected_item_bottom flex flex-col hover:bg-neutral-200 rounded-md max-h-[200px] items-center">
+                    {%if item['type'] != 'Shoes'%}
+                    <div class="w-[300px] h-[300px] overflow-hidden relative">
+                        <img class="bottom_inner absolute inset-0 w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                    </div>
+                    {%else%}
+                    <div class="w-[300px] h-[300px] overflow-hidden relative flex justify-center items-center">
+                        <img class="bottom_inner w-full h-full object-contain" src="{{ item['image_url'] }}" alt="{{ item['type'] }}">
+                    </div>
+                    {%endif%}
+                    <div class="flex flex-col w-[12rem]">
+                        <h1 class="underline">{{ item['type'] }}</h1>
+                        <p class="my-1">{{ item['text'] }}</p>
+                    </div>
+                  </button>
+                {% endfor %}
                 </div>
               </div>
             </div>

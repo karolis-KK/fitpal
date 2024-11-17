@@ -4,6 +4,7 @@ const editButtons = document.querySelectorAll(".edit-button");
 const editPopup = document.getElementById("edit-popup");
 const editForm = document.getElementById("edit-form");
 const editClothingTextInput = document.getElementById("edit_clothing_text");
+const editClothingBrandInput = document.getElementById("edit_clothing_brand");
 const closeEditButton = document.getElementById("close-edit");
 const flashPopup = document.getElementById("flash-popup");
 const filtersPopup = document.getElementById("filters-popup");
@@ -35,9 +36,11 @@ editButtons.forEach(button => {
     button.addEventListener("click", (event) => {
         const itemId = button.getAttribute("data-item-id");
         const currentText = button.getAttribute("data-current-text");
+        const currentBrand = button.getAttribute("data-current-brand");
 
         editForm.action = `/edit-clothing/${itemId}`;
         editClothingTextInput.value = currentText;
+        editClothingBrandInput.value = currentBrand;
         
         editPopup.classList.remove("hidden");
         editPopup.classList.add("flex");

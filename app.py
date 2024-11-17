@@ -3,6 +3,7 @@ from firebase_admin import credentials, firestore
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, jsonify
 import os 
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 # Initialize Flask app
@@ -26,9 +27,10 @@ def index():
 def add_clothing():
     clothing_type = request.form['clothing_type']
     clothing_text = request.form["clothing_text"]
+    clothing_brand = request.form["clothing_brand"]
     image = request.files['image']
 
-    if clothing_type == "Hoodie" or clothing_type == "Crewneck" or clothing_type == "Sweater/Knit" or clothing_type == "T-Shirt":
+    if clothing_type == "Hoodie" or clothing_type == "Crewneck" or clothing_type == "Sweater/Knit" or clothing_type == "T-Shirt" or clothing_type == "Shirt" or clothing_type == "Jacket" or clothing_type == "Longsleeve":
         clothing_section = "top"
     elif clothing_type == "Pants":
         clothing_section = "middle"
@@ -38,60 +40,50 @@ def add_clothing():
     image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
     image.save(image_path)
 
+    if clothing_brand.strip() == "":
+        clothing_brand = None
+
     clothing_data = {
         'type': clothing_type,
         'text' : clothing_text,
+        "brand": clothing_brand,
         'image_url': url_for('uploaded_file', filename=image.filename),
-        'section': clothing_section
+        'section': clothing_section,
+        'timestamp': datetime.utcnow()
     }
     db.collection('clothing').add(clothing_data)
     return redirect(url_for('my_closet'))
 
 @app.route("/my-closet", methods=["GET", "POST"])
 def my_closet():
-    if request.method == "POST":
-        filter_types = request.form.getlist('filter_type[]')
-        sort_by = request.form.get('sort_by')
+    page = request.args.get('page', 1, type=int)  # Get the current page number
+    per_page = 5  # Number of items per page
 
-        # Fetch clothing items based on filters
-        if "All" in filter_types:
-            clothing_items = db.collection('clothing').stream()
-        else:
-            clothing_items = db.collection('clothing').where('type', 'in', filter_types).stream()
+    # Fetch clothing items based on filters
+    clothing_items_query = db.collection('clothing').limit(per_page).offset((page - 1) * per_page).stream()
+    clothing_items_list = [
+        {
+            'id': item.id,
+            'type': item.to_dict().get('type'),
+            'text': item.to_dict().get('text'),
+            'brand': item.to_dict().get('brand'),
+            'image_url': item.to_dict().get('image_url'),
+            'timestamp': item.to_dict().get('timestamp', 0)
+        } for item in clothing_items_query
+    ]
 
-        # Convert to list for sorting
-        clothing_items_list = [
-            {
-                'id': item.id,
-                'type': item.to_dict().get('type'),
-                'text': item.to_dict().get('text'),
-                'image_url': item.to_dict().get('image_url'),
-                'timestamp': item.to_dict().get('timestamp', 0)
-            } for item in clothing_items
-        ]
+    # Fetch total count for pagination
+    total_items = len(list(db.collection('clothing').stream()))  
+    total_pages = (total_items + per_page - 1) // per_page 
 
-        if sort_by == "newest":
-            clothing_items_list.sort(key=lambda x: x['timestamp'], reverse=True)
-        elif sort_by == "oldest":
-            clothing_items_list.sort(key=lambda x: x['timestamp'])
+    return render_template("closet.html", clothing_items=clothing_items_list, page=page, total_pages=total_pages)
 
-    else:
-        clothing_items = db.collection('clothing').stream()
-        clothing_items_list = [
-            {
-                'id': item.id,
-                'type': item.to_dict().get('type'),
-                'text': item.to_dict().get('text'),
-                'image_url': item.to_dict().get('image_url'),
-                'timestamp': item.to_dict().get('timestamp', 0)
-            } for item in clothing_items
-        ]
-
-    return render_template("closet.html", clothing_items=clothing_items_list)
-
-@app.route("/my-outfits")
+@app.route("/my-outfits", methods=["GET"])
 def my_outfits():
-    outfits = db.collection('outfits').stream()
+    page = request.args.get('page', 1, type=int)  # current page
+    per_page = 30 # Number of outfits per page
+
+    outfits_query = db.collection('outfits').limit(per_page).offset((page - 1) * per_page).stream()
     outfits_list = [
         {
             'id': outfit.id,
@@ -99,9 +91,13 @@ def my_outfits():
             'top': outfit.to_dict().get('top'),
             'middle': outfit.to_dict().get('middle'),
             'bottom': outfit.to_dict().get('bottom'),
-        } for outfit in outfits
+        } for outfit in outfits_query
     ]
-    return render_template("myoutfits.html", outfits=outfits_list)
+
+    total_items = len(list(db.collection('outfits').stream()))
+    total_pages = (total_items + per_page - 1) // per_page  # total pages
+
+    return render_template("myoutfits.html", outfits=outfits_list, page=page, total_pages=total_pages)
 
 @app.route("/make-outfit")
 def make_outfit():
@@ -114,6 +110,7 @@ def make_outfit():
             'id': item.id,
             'type': item.to_dict().get('type'),
             'text': item.to_dict().get('text'),
+            'brand': item.to_dict().get('brand'),
             'image_url': item.to_dict().get('image_url'),
         } for item in top_items
     ]
@@ -123,6 +120,7 @@ def make_outfit():
             'id': item.id,
             'type': item.to_dict().get('type'),
             'text': item.to_dict().get('text'),
+            'brand': item.to_dict().get('brand'),
             'image_url': item.to_dict().get('image_url'),
         } for item in middle_items
     ]
@@ -132,6 +130,7 @@ def make_outfit():
             'id': item.id,
             'type': item.to_dict().get('type'),
             'text': item.to_dict().get('text'),
+            'brand': item.to_dict().get('brand'),
             'image_url': item.to_dict().get('image_url'),
         } for item in bottom_items
     ]
@@ -148,15 +147,17 @@ def remove_clothing(item_id):
 def edit_clothing(item_id):
     if request.method == "POST":
         clothing_text = request.form["clothing_text"]
+        clothing_brand = request.form["clothing_brand"]
         db.collection('clothing').document(item_id).update({
-            'text': clothing_text
+            'text': clothing_text,
+            'brand': clothing_brand,
         })
         return redirect(url_for('my_closet'))
 
     item = db.collection('clothing').document(item_id).get()
     if item.exists:
         clothing_data = item.to_dict()
-        return render_template("edit_clothing.html", clothing_data=clothing_data, item_id=item_id)
+        return render_template("closet.html", clothing_data=clothing_data, item_id=item_id)
     else:
         flash("Clothing item not found.")
         return redirect(url_for('my_closet'))

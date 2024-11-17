@@ -7,7 +7,7 @@
     <h1>You dont have any outfits. Create some <a href="{{ url_for('make_outfit') }}" class="underline">here</a></h1>
 </section>
 {%else%}
-<section class="flex flex-wrap grow px-8 py-4">
+<section class="flex flex-wrap justify-center lg:justify-normal grow px-8 py-4">
     {% for outfit in outfits %}
         <div class="p-4 m-2 w-64">
             <h2 class="text-xl text-center">{{ outfit['name'] }}</h2>
@@ -22,5 +22,20 @@
         </div>
         {% endfor %}
 </section>
+{%if total_pages > 1 %}
+<div class="pagination flex justify-center items-center pb-2">
+    {% if page > 1 %}
+        <a class="mr-2" href="{{ url_for('my_closet', page=page-1) }}"><svg class="size-4" data-slot="icon" aria-hidden="true" fill="none" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.75 19.5 8.25 12l7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg></a>
+    {% endif %}
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+        <a class="ml-2" href="{{ url_for('my_closet', page=page+1) }}"><svg class="size-4" data-slot="icon" aria-hidden="true" fill="none" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="m8.25 4.5 7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg></a>
+    {% endif %}
+</div>
+{%endif%}
 {%endif%}
 {%endblock%}

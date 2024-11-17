@@ -70,7 +70,7 @@ document.querySelectorAll(".selected_item_bottom").forEach(element => {
     
         const image_3 = element.querySelector(".bottom_inner").src;
 
-        document.getElementById("bottom").innerHTML = `<img src="${image_3}" alt="Selected Bottom" class="w-full h-full object-contain -mt-12">`;
+        document.getElementById("bottom").innerHTML = `<img src="${image_3}" alt="Selected Bottom" class="w-[150px] h-[150px] object-contain -mt-16">`;
     })
 })
 
