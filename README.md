@@ -3,8 +3,7 @@
 
 Add your fashion pieces, make outfits. Great for planning and keeping all of your outfits in one place
 
-Let me know if you would use this, im thinking of deploying it or even making it an app.
-
+This project was originally made for the highseas hackclub, although im planning on launching it the future
 
 ## Contributing
 
