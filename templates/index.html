@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <body class="bg-neutral-100 font-inter flex flex-col h-screen">
-    <nav class="flex items-center justify-between h-12 px-24 border-b ">
+    <nav id="nav" class="flex items-center justify-between h-12 md:px-24 px-12 border-b ">
         <div><img src="/static/img/getimg_ai_img-jzrvmvX7cIMiCoBBu8Un7.png" class="size-24" alt=""></div>
-        <div class="flex items-center">
+        <div class="items-center hidden md:flex">
             <a class="hover:underline" href="{{ url_for('index')}}">Home</a>
             <a class="mx-4 hover:underline" href="{{ url_for('my_outfits')}}">My outfits</a>
             <a class="hover:underline" href="{{ url_for('my_closet')}}">My closet</a>
@@ -21,11 +21,33 @@
                 <path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg></a>
         </div>
+        <button id="menu-btn" class="md:hidden">
+            <svg class="size-8" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.8" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+        </button>
+        <div id="menu" class="bg-black/40 h-screen absolute inset-0 z-20 hidden items-center justify-end">
+            <div class="h-full bg-white w-[15rem] border-l border-neutral-200 shadow-sm">
+                <div class="flex justify-start py-4 px-4">
+                    <button id="close-menu"><svg class="size-8" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg></button>
+                </div>
+                <div class="flex flex-col text-2xl items-center">
+                    <a class="focus:underline" href="{{ url_for('index')}}">Home</a>
+                    <a class="focus:underline my-2" href="{{ url_for('my_outfits')}}">My outfits</a>
+                    <a class="focus:underline" href="{{ url_for('my_closet')}}">My closet</a>
+                    <a class="focus:underline flex items-center mt-2" href="{{ url_for('make_outfit')}}">Make an outfit<svg class="size-6 ml-2" data-slot="icon" class="size-8 ml-2" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg></a>
+                </div>
+            </div>
+        </div>
     </nav>
     {%block content%}
     <section class="grow flex justify-center items-center flex-col">
-        <div>
-            <h1 class="text-6xl">FitPal: Your Personal Outfit Maker & Closet Organizer</h1>
+        <div class="md:ml-12 lg:ml-0">
+            <h1 class="md:text-6xl text-5xl lg:w-auto md:w-[40rem] w-[20rem]">FitPal: Your Personal Outfit Maker & Closet Organizer</h1>
             <div class="flex">
                 <a href="{{url_for('make_outfit')}}" class="underline text-2xl flex items-center">Explore<svg data-slot="icon" class="size-8 ml-2" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -34,6 +56,6 @@
         </div>
     </section>
     {%endblock%}
-    {%block js%}{%endblock%}
+    {%block js%}<script src="/static/js/index.js"></script>{%endblock%}
 </body>
 </html>

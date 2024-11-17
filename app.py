@@ -45,7 +45,6 @@ def add_clothing():
         'section': clothing_section
     }
     db.collection('clothing').add(clothing_data)
-    flash("Clothing item added successfully!")
     return redirect(url_for('my_closet'))
 
 @app.route("/my-closet", methods=["GET", "POST"])
@@ -152,10 +151,8 @@ def edit_clothing(item_id):
         db.collection('clothing').document(item_id).update({
             'text': clothing_text
         })
-        flash("Clothing item updated successfully!")
         return redirect(url_for('my_closet'))
 
-    # If GET request, fetch the current item data
     item = db.collection('clothing').document(item_id).get()
     if item.exists:
         clothing_data = item.to_dict()
@@ -188,7 +185,6 @@ def save_outfit():
 @app.route("/delete-outfit/<outfit_id>", methods=["POST"])
 def delete_outfit(outfit_id):
     db.collection('outfits').document(outfit_id).delete()
-    flash("Outfit deleted successfully!")
     return redirect(url_for('my_outfits')) 
 
 if __name__ == "__main__":
